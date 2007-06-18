@@ -1,6 +1,6 @@
 Name:           logrotate
 Version:        3.7.5
-Release:        %mkrel 2
+Release:        %mkrel 3
 Summary:        Rotates, compresses, removes and mails system log files
 License:        GPL
 Group:          File tools
@@ -14,7 +14,6 @@ URL:            http://download.fedora.redhat.com/pub/fedora/linux/core/developm
 #  make create-archive
 Source0:        ftp://ftp.redhat.com/pub/redhat/code/logrotate/%{name}-%{version}.tar.gz
 Source1:        logrotate.conf.mdv
-Source2:        logrotate.syslog.conf
 Patch0:         logrotate-stop_on_script_errors.patch
 Patch1:         logrotate-run_scripts_with_arg0.patch
 # ease upgrade regarding #20745
@@ -50,15 +49,13 @@ log files on your system.
 %{__mkdir_p} %{buildroot}%{_sysconfdir}
 %{__cp} -a %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/%{name}.d
-%{__cp} -a %{SOURCE2} %{buildroot}%{_sysconfdir}/%{name}.d/syslog
-
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/cron.daily
 %{__install} -m 0755 examples/%{name}.cron %{buildroot}%{_sysconfdir}/cron.daily/%{name}
 
 %{__mkdir_p} %{buildroot}%{_var}/lib
 /bin/touch %{buildroot}%{_var}/lib/logrotate.status
 
+install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}.d
 
 %clean
 %{__rm} -rf %{buildroot}
@@ -69,9 +66,6 @@ log files on your system.
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}.conf
 %attr(0755,root,root) %{_sysconfdir}/cron.daily/%{name}
 %attr(0755,root,root) %dir %{_sysconfdir}/%{name}.d
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/syslog
 %attr(0755,root,root) %{_sbindir}/%{name}
 %attr(0644,root,root) %{_mandir}/man8/%{name}.8*
 %attr(0644,root,root) %verify(not size md5 mtime) %config(noreplace) %{_var}/lib/logrotate.status
-
-
