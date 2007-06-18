@@ -5,13 +5,6 @@ Summary:        Rotates, compresses, removes and mails system log files
 License:        GPL
 Group:          File tools
 URL:            http://download.fedora.redhat.com/pub/fedora/linux/core/development/source/SRPMS/
-# The source for this package was pulled from cvs.
-# Use the following commands to generate the tarball:
-#  export CVSROOT=:pserver:anonymous@rhlinux.redhat.com:/usr/local/CVS
-#  cvs login (hit return)
-#  cvs co logrotate
-#  cd logrotate
-#  make create-archive
 Source0:        ftp://ftp.redhat.com/pub/redhat/code/logrotate/%{name}-%{version}.tar.gz
 Source1:        logrotate.conf.mdv
 Patch0:         logrotate-stop_on_script_errors.patch
@@ -20,7 +13,7 @@ Patch1:         logrotate-run_scripts_with_arg0.patch
 Conflicts:      sysklogd < 1.4.1-12mdk
 Conflicts:      syslog-ng < 1.6.9-1mdk 
 BuildRequires:  popt-devel
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRoot:      %{_tmppath}/%{name}-%{version}
 
 %description
 The logrotate utility is designed to simplify the administration of
@@ -47,7 +40,7 @@ log files on your system.
 %{make} PREFIX=%{buildroot} MANDIR=%{_mandir} install 
 
 %{__mkdir_p} %{buildroot}%{_sysconfdir}
-%{__cp} -a %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
+install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
 
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/cron.daily
 %{__install} -m 0755 examples/%{name}.cron %{buildroot}%{_sysconfdir}/cron.daily/%{name}
@@ -61,11 +54,11 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}.d
 %{__rm} -rf %{buildroot}
 
 %files
-%defattr(0644,root,root,0755)
+%defattr(-,root,root)
 %doc CHANGES COPYING examples README*
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/%{name}.conf
-%attr(0755,root,root) %{_sysconfdir}/cron.daily/%{name}
-%attr(0755,root,root) %dir %{_sysconfdir}/%{name}.d
-%attr(0755,root,root) %{_sbindir}/%{name}
-%attr(0644,root,root) %{_mandir}/man8/%{name}.8*
-%attr(0644,root,root) %verify(not size md5 mtime) %config(noreplace) %{_var}/lib/logrotate.status
+%config(noreplace) %{_sysconfdir}/%{name}.conf
+%{_sysconfdir}/cron.daily/%{name}
+%{_sysconfdir}/%{name}.d
+%{_sbindir}/%{name}
+%{_mandir}/man8/%{name}.8*
+%config(noreplace) %{_var}/lib/logrotate.status
