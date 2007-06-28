@@ -1,6 +1,6 @@
 Name:           logrotate
 Version:        3.7.5
-Release:        %mkrel 3
+Release:        %mkrel 4
 Summary:        Rotates, compresses, removes and mails system log files
 License:        GPL
 Group:          File tools
@@ -10,7 +10,7 @@ Source1:        logrotate.conf.mdv
 Patch0:         logrotate-stop_on_script_errors.patch
 Patch1:         logrotate-run_scripts_with_arg0.patch
 # ease upgrade regarding #20745
-Conflicts:      sysklogd < 1.4.1-12mdk
+Conflicts:      sysklogd < 1.4.2
 Conflicts:      syslog-ng < 1.6.9-1mdk 
 BuildRequires:  popt-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}
