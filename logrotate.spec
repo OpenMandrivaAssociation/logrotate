@@ -13,7 +13,6 @@ Patch1:         logrotate-run_scripts_with_arg0.patch
 Conflicts:      sysklogd < 1.4.2
 Conflicts:      syslog-ng < 1.6.9-1mdk 
 BuildRequires:  popt-devel
-BuildRoot:      %{_tmppath}/%{name}-%{version}
 
 %description
 The logrotate utility is designed to simplify the administration of
