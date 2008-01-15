@@ -1,6 +1,6 @@
 Name:           logrotate
 Version:        3.7.5
-Release:        %mkrel 6
+Release:        %mkrel 7
 Summary:        Rotates, compresses, removes and mails system log files
 License:        GPL
 Group:          File tools
