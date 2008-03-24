@@ -1,12 +1,13 @@
 Name:           logrotate
 Version:        3.7.5
-Release:        %mkrel 7
+Release:        %mkrel 8
 Summary:        Rotates, compresses, removes and mails system log files
 License:        GPL
 Group:          File tools
 URL:            http://download.fedora.redhat.com/pub/fedora/linux/core/development/source/SRPMS/
 Source0:        %{name}-%{version}.tar.gz
 Source1:        logrotate.conf
+Source2:        logrotate.cron
 Patch0:         logrotate-stop_on_script_errors.patch
 Patch1:         logrotate-run_scripts_with_arg0.patch
 # ease upgrade regarding #20745
@@ -43,7 +44,7 @@ log files on your system.
 install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
 
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/cron.daily
-%{__install} -m 0755 examples/%{name}.cron %{buildroot}%{_sysconfdir}/cron.daily/%{name}
+%{__install} -m 0755 %{SOURCE2} %{buildroot}%{_sysconfdir}/cron.daily/%{name}
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}.d
 
