@@ -1,20 +1,20 @@
 Name:           logrotate
-Version:        3.7.5
-Release:        %mkrel 9
+Version:        3.7.7
+Release:        %mkrel 1
 Summary:        Rotates, compresses, removes and mails system log files
 License:        GPL
 Group:          File tools
-URL:            http://download.fedora.redhat.com/pub/fedora/linux/core/development/source/SRPMS/
+URL:		ftp://ftp.uninett.no/pub/linux/Fedora/development/source/SRPMS
 Source0:        %{name}-%{version}.tar.gz
 Source1:        logrotate.conf
 Source2:        logrotate.cron
-Patch0:         logrotate-stop_on_script_errors.patch
-Patch1:         logrotate-run_scripts_with_arg0.patch
+Patch0:		logrotate-3.7.7-curdir2.patch
+Patch1:		logrotate-3.7.7-toolarge.patch
 # ease upgrade regarding #20745
 Conflicts:      sysklogd < 1.4.2
 Conflicts:      syslog-ng < 1.6.9-1mdk 
 BuildRequires:  popt-devel
-BuildRoot:      %{_tmppath}/%{name}-%{version}
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The logrotate utility is designed to simplify the administration of
@@ -28,13 +28,16 @@ Install the logrotate package if you need a utility to deal with the
 log files on your system.
 
 %prep
+
 %setup -q
-%patch0 -p1 -b .stop_on_script_errors
-%patch1 -p1 -b .run_scripts_with_arg0
+%patch0 -p1 -b .curdir
+%patch1 -p1 -b .toolarge
 
 %build
-%{make} RPM_OPT_FLAGS="%{optflags}" WITH_SELINUX=no
-%{make} test
+export LDFLAGS="`rpm --eval %%configure|grep LDFLAGS|cut -d\\" -f2|sed -e 's/\$LDFLAGS\ //'`"
+
+%make RPM_OPT_FLAGS="%{optflags}" WITH_SELINUX=no LDFLAGS="$LDFLAGS"
+%make test
 
 %install
 %{__rm} -rf %{buildroot}
