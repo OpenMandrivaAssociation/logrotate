@@ -10,7 +10,6 @@ Source1:        logrotate.conf
 Source2:        logrotate.cron
 Patch0:		logrotate-3.7.7-curdir2.patch
 Patch1:		logrotate-3.7.7-toolarge.patch
-Requires(post):   ccp
 # ease upgrade regarding #20745
 Conflicts:      sysklogd < 1.4.2
 Conflicts:      syslog-ng < 1.6.9-1mdk 
@@ -56,7 +55,6 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}.d
 %{__rm} -rf %{buildroot}
 
 %post
-ccp --set AllowOrphans -d -o %{_sysconfdir}/%{name}.conf -n %{_sysconfdir}/%{name}.conf -i
 if [ $1 = 1 ]; then
     # installation
     /bin/touch %{_var}/lib/logrotate.status
