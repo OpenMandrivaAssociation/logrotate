@@ -1,15 +1,14 @@
 Name:           logrotate
-Version:        3.7.8
-Release:        %mkrel 5
+Version:        3.7.9
+Release:        %mkrel 1
 Summary:        Rotates, compresses, removes and mails system log files
 License:        GPL
 Group:          File tools
-URL:		ftp://ftp.uninett.no/pub/linux/Fedora/development/source/SRPMS
-Source0:        %{name}-%{version}.tar.gz
+URL:		    https://fedorahosted.org/logrotate/
+Source0:        https://fedorahosted.org/releases/l/o/logrotate/%{name}-%{version}.tar.gz
 Source1:        logrotate.conf
 Source2:        logrotate.cron
-Patch0:		logrotate-3.7.7-curdir2.patch
-Patch1:		logrotate-3.7.7-toolarge.patch
+Patch0:         logrotate-3.7.9-fix-format-errrors.patch
 # ease upgrade regarding #20745
 Conflicts:      sysklogd < 1.4.2
 Conflicts:      syslog-ng < 1.6.9-1mdk 
@@ -28,10 +27,8 @@ Install the logrotate package if you need a utility to deal with the
 log files on your system.
 
 %prep
-
 %setup -q
-%patch0 -p1 -b .curdir
-%patch1 -p1 -b .toolarge
+%patch0 -p1
 
 %build
 export LDFLAGS="`rpm --eval %%configure|grep LDFLAGS|cut -d\\" -f2|sed -e 's/\$LDFLAGS\ //'`"
@@ -68,3 +65,4 @@ fi
 %{_sysconfdir}/%{name}.d
 %{_sbindir}/%{name}
 %{_mandir}/man8/%{name}.8*
+%{_mandir}/man5/%{name}.conf.5*
