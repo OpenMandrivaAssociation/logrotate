@@ -18,6 +18,7 @@ Patch7:		logrotate-3.7.9-shred.patch
 Patch8:		logrotate-3.7.9-statefile.patch
 Patch9:		logrotate-3.7.9-atomic-create.patch 
 Patch100:	logrotate-3.7.9-fix-format-errrors.patch
+Patch101:	logrotate-3.7.9-third_arg_fix.diff
 # ease upgrade regarding #20745
 Conflicts:	sysklogd < 1.4.2
 Conflicts:	syslog-ng < 1.6.9-1mdk 
@@ -50,6 +51,7 @@ log files on your system.
 %patch9 -p1
 
 %patch100 -p0
+%patch101 -p0
 
 %build
 %make RPM_OPT_FLAGS="%{optflags}" WITH_SELINUX=no WITH_ACL=yes LDFLAGS="%{ldflags}"
