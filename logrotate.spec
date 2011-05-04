@@ -1,7 +1,7 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
 Version:	3.7.9
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	GPL
 Group:		File tools
 URL:		https://fedorahosted.org/logrotate/
