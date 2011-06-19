@@ -1,7 +1,7 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
 Version:	3.7.9
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	GPL
 Group:		File tools
 URL:		https://fedorahosted.org/logrotate/
@@ -17,6 +17,8 @@ Patch6:		logrotate-3.7.9-tabooext.patch
 Patch7:		logrotate-3.7.9-shred.patch
 Patch8:		logrotate-3.7.9-statefile.patch
 Patch9:		logrotate-3.7.9-atomic-create.patch 
+Patch10:	logrotate-3.7.9-address-parsing.patch
+Patch11:	logrotate-3.7.9-support-no-acls.patch
 Patch100:	logrotate-3.7.9-fix-format-errrors.patch
 Patch101:	logrotate-3.7.9-third_arg_fix.diff
 # ease upgrade regarding #20745
@@ -49,6 +51,8 @@ log files on your system.
 %patch7
 %patch8
 %patch9 -p1
+%patch10
+%patch11
 
 %patch100 -p0
 %patch101 -p0
