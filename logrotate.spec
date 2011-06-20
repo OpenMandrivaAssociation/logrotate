@@ -58,7 +58,7 @@ log files on your system.
 %patch101 -p0
 
 %build
-%make RPM_OPT_FLAGS="%{optflags}" WITH_SELINUX=no WITH_ACL=yes LDFLAGS="%{ldflags}"
+%make RPM_OPT_FLAGS="%{optflags} -Dasprintf=asprintf" WITH_SELINUX=no WITH_ACL=yes LDFLAGS="%{ldflags}"
 #make test
 
 %install
