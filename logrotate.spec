@@ -1,25 +1,14 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
-Version:	3.7.9
-Release:	%mkrel 4
+Version:	3.8.1
+Release:	%mkrel 1
 License:	GPL
 Group:		File tools
 URL:		https://fedorahosted.org/logrotate/
 Source0:	https://fedorahosted.org/releases/l/o/logrotate/%{name}-%{version}.tar.gz
 Source1:	logrotate.conf
 Source2:	logrotate.cron
-Patch1:		logrotate-3.7.8-man-authors.patch
-Patch2:		logrotate-3.7.9-man-size.patch
-Patch3:		logrotate-3.7.9-man-page.patch
-Patch4:		logrotate-3.7.9-config.patch
-Patch5:		logrotate-3.7.9-acl.patch
-Patch6:		logrotate-3.7.9-tabooext.patch
-Patch7:		logrotate-3.7.9-shred.patch
-Patch8:		logrotate-3.7.9-statefile.patch
-Patch9:		logrotate-3.7.9-atomic-create.patch 
-Patch10:	logrotate-3.7.9-address-parsing.patch
-Patch11:	logrotate-3.7.9-support-no-acls.patch
-Patch100:	logrotate-3.7.9-fix-format-errrors.patch
+Patch9:		logrotate-3.8.0-atomic-create.patch 
 Patch101:	logrotate-3.7.9-third_arg_fix.diff
 # ease upgrade regarding #20745
 Conflicts:	sysklogd < 1.4.2
@@ -42,19 +31,7 @@ log files on your system.
 %prep
 
 %setup -q
-%patch1 -p2
-%patch2
-%patch3 -p1
-%patch4
-%patch5 -p2
-%patch6 -p1
-%patch7
-%patch8
-%patch9 -p1
-%patch10
-%patch11
-
-%patch100 -p0
+%patch9 -p0
 %patch101 -p0
 
 %build
