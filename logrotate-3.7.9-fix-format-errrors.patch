@@ -1,0 +1,11 @@
+--- config.c	2011-04-04 12:20:19.242772347 +0200
++++ config.c.oden	2011-04-04 12:21:39.850168861 +0200
+@@ -1296,7 +1296,7 @@ static int readConfigFile(const char *co
+ 				}
+ 			if (globerr_msg) {
+ 				if (!(newlog->flags & LOG_FLAG_MISSINGOK))
+-					message(MESS_ERROR, globerr_msg);
++					message(MESS_ERROR, "%s", globerr_msg);
+ 				free(globerr_msg);
+ 				globerr_msg = NULL;
+ 				if (!(newlog->flags & LOG_FLAG_MISSINGOK))
