@@ -26,6 +26,7 @@ Conflicts:	sysklogd < 1.4.2
 Conflicts:	syslog-ng < 1.6.9-1mdk 
 BuildRequires:	popt-devel
 BuildRequires:	acl-devel
+Requires(post):	coreutils
 
 %description
 The logrotate utility is designed to simplify the administration of
