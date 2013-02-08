@@ -1,7 +1,7 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
 Version:	3.7.9
-Release:	%mkrel 6
+Release:	7
 License:	GPL
 Group:		File tools
 URL:		https://fedorahosted.org/logrotate/
@@ -26,7 +26,6 @@ Conflicts:	sysklogd < 1.4.2
 Conflicts:	syslog-ng < 1.6.9-1mdk 
 BuildRequires:	popt-devel
 BuildRequires:	acl-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The logrotate utility is designed to simplify the administration of
@@ -62,20 +61,15 @@ log files on your system.
 #make test
 
 %install
-%{__rm} -rf %{buildroot}
-
 %{make} PREFIX=%{buildroot} MANDIR=%{_mandir} install
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}
+mkdir -p %{buildroot}%{_sysconfdir}
 install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/cron.daily
-%{__install} -m 0755 %{SOURCE2} %{buildroot}%{_sysconfdir}/cron.daily/%{name}
+mkdir -p %{buildroot}%{_sysconfdir}/cron.daily
+install -m 0755 %{SOURCE2} %{buildroot}%{_sysconfdir}/cron.daily/%{name}
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}.d
-
-%clean
-%{__rm} -rf %{buildroot}
 
 %post
 if [ $1 = 1 ]; then
@@ -84,7 +78,6 @@ if [ $1 = 1 ]; then
 fi
 
 %files
-%defattr(-,root,root)
 %doc CHANGES COPYING examples README*
 %config(noreplace) %{_sysconfdir}/%{name}.conf
 %{_sysconfdir}/cron.daily/%{name}
