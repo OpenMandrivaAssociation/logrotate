@@ -51,17 +51,13 @@ install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}.d
 
+install -d %{buildroot}%{_localstatedir}/lib
+touch %{buildroot}%{_localstatedir}/lib/logrotate.status
+
 %clean
 %{__rm} -rf %{buildroot}
 
-%post
-if [ $1 = 1 ]; then
-    # installation
-    /bin/touch %{_var}/lib/logrotate.status
-fi
-
 %files
-%defattr(-,root,root)
 %doc CHANGES COPYING examples README*
 %config(noreplace) %{_sysconfdir}/%{name}.conf
 %{_sysconfdir}/cron.daily/%{name}
@@ -69,3 +65,4 @@ fi
 %{_sbindir}/%{name}
 %{_mandir}/man8/%{name}.8*
 %{_mandir}/man5/%{name}.conf.5*
+%verify(not size md5 mtime) %config(noreplace) %{_localstatedir}/lib/logrotate.status
