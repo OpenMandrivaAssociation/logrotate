@@ -1,4 +1,2 @@
 sources:
-  "logrotate-3.8.1.tar.gz:"	1df36cee76a9c4c7438f35ca3599a7bdd68a09b5
-  "logrotate.conf:"	403e0b11c69a0150de8f12c812bc49f37b860ab0
-  "logrotate.cron:"	c4ca5b2f94410a82f8289f1ec37ce642d784f6f2
+  logrotate-3.8.3.tar.gz: 19d70e2cfb97c1cee32e0d709da990856311022a

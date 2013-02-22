@@ -1,6 +1,6 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
-Version:	3.8.1
+Version:	3.8.3
 Release:	1
 License:	GPL+
 Group:		File tools
@@ -8,8 +8,6 @@ URL:		https://fedorahosted.org/logrotate/
 Source0:	https://fedorahosted.org/releases/l/o/logrotate/%{name}-%{version}.tar.gz
 Source1:	logrotate.conf
 Source2:	logrotate.cron
-Patch9:		logrotate-3.8.0-atomic-create.patch 
-Patch101:	logrotate-3.7.9-third_arg_fix.diff
 # ease upgrade regarding #20745
 Conflicts:	sysklogd < 1.4.2
 Conflicts:	syslog-ng < 1.6.9-1mdk 
@@ -29,8 +27,6 @@ log files on your system.
 
 %prep
 %setup -q
-%patch9 -p0
-%patch101 -p0
 
 %build
 %make RPM_OPT_FLAGS="%{optflags} -Dasprintf=asprintf" WITH_SELINUX=no WITH_ACL=yes LDFLAGS="%{ldflags}"

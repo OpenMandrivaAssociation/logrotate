@@ -1,0 +1,12 @@
+#!/bin/sh
+# Mandriva logrotate cron task
+# $Id: logrotate.cron 189740 2008-03-24 12:07:34Z guillomovitch $
+
+log=/tmp/$$$$
+/usr/sbin/logrotate /etc/logrotate.conf >$log 2>&1
+rc=$?
+if [ $rc != 0 ]; then
+    /usr/bin/logger -t logrotate "ALERT exited abnormally with [$rc]"
+    /usr/bin/logger -t logrotate -f $log
+fi
+rm -f $log
