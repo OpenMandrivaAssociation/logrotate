@@ -1,8 +1,8 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
 Version:	3.8.1
-Release:	%mkrel 1
-License:	GPL
+Release:	1
+License:	GPL+
 Group:		File tools
 URL:		https://fedorahosted.org/logrotate/
 Source0:	https://fedorahosted.org/releases/l/o/logrotate/%{name}-%{version}.tar.gz
@@ -15,7 +15,6 @@ Conflicts:	sysklogd < 1.4.2
 Conflicts:	syslog-ng < 1.6.9-1mdk 
 BuildRequires:	popt-devel
 BuildRequires:	acl-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The logrotate utility is designed to simplify the administration of
@@ -29,36 +28,30 @@ Install the logrotate package if you need a utility to deal with the
 log files on your system.
 
 %prep
-
 %setup -q
 %patch9 -p0
 %patch101 -p0
 
 %build
 %make RPM_OPT_FLAGS="%{optflags} -Dasprintf=asprintf" WITH_SELINUX=no WITH_ACL=yes LDFLAGS="%{ldflags}"
-#make test
+
+%check
+make test
 
 %install
-%{__rm} -rf %{buildroot}
+make PREFIX=%{buildroot} MANDIR=%{_mandir} install
 
-%{make} PREFIX=%{buildroot} MANDIR=%{_mandir} install
+install -m644 %{SOURCE1} -D %{buildroot}%{_sysconfdir}/%{name}.conf
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}
-install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}.conf
+install -m755 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/cron.daily/%{name}
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/cron.daily
-%{__install} -m 0755 %{SOURCE2} %{buildroot}%{_sysconfdir}/cron.daily/%{name}
-
-install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}.d
+install -d -m755 %{buildroot}%{_sysconfdir}/%{name}.d
 
 install -d %{buildroot}%{_localstatedir}/lib
 touch %{buildroot}%{_localstatedir}/lib/logrotate.status
 
-%clean
-%{__rm} -rf %{buildroot}
-
 %files
-%doc CHANGES COPYING examples README*
+%doc CHANGES examples README*
 %config(noreplace) %{_sysconfdir}/%{name}.conf
 %{_sysconfdir}/cron.daily/%{name}
 %{_sysconfdir}/%{name}.d
