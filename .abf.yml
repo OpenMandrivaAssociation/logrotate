@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   logrotate-3.8.3.tar.gz: 19d70e2cfb97c1cee32e0d709da990856311022a
+sources:
+  logrotate-3.8.4.tar.gz: 81d9aeefa6b1c77fe4917a87d9b771a60ff6b920
