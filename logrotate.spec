@@ -2,17 +2,16 @@ Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
 Version:	3.8.4
 Release:	1
-License:	GPL+
+License:	GPLv2+
 Group:		File tools
-URL:		https://fedorahosted.org/logrotate/
+Url:		https://fedorahosted.org/logrotate/
 Source0:	https://fedorahosted.org/releases/l/o/logrotate/%{name}-%{version}.tar.gz
 Source1:	logrotate.conf
 Source2:	logrotate.cron
+BuildRequires:	acl-devel
+BuildRequires:	pkgconfig(popt)
 # ease upgrade regarding #20745
 Conflicts:	sysklogd < 1.4.2
-Conflicts:	syslog-ng < 1.6.9-1mdk 
-BuildRequires:	popt-devel
-BuildRequires:	acl-devel
 
 %description
 The logrotate utility is designed to simplify the administration of
@@ -55,3 +54,4 @@ touch %{buildroot}%{_localstatedir}/lib/logrotate.status
 %{_mandir}/man8/%{name}.8*
 %{_mandir}/man5/%{name}.conf.5*
 %verify(not size md5 mtime) %config(noreplace) %{_localstatedir}/lib/logrotate.status
+
