@@ -1,6 +1,6 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
-Version:	3.8.4
+Version:	3.8.6
 Release:	1
 License:	GPLv2+
 Group:		File tools
@@ -37,9 +37,7 @@ make test
 make PREFIX=%{buildroot} MANDIR=%{_mandir} install
 
 install -m644 %{SOURCE1} -D %{buildroot}%{_sysconfdir}/%{name}.conf
-
 install -m755 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/cron.daily/%{name}
-
 install -d -m755 %{buildroot}%{_sysconfdir}/%{name}.d
 
 install -d %{buildroot}%{_localstatedir}/lib
@@ -54,4 +52,3 @@ touch %{buildroot}%{_localstatedir}/lib/logrotate.status
 %{_mandir}/man8/%{name}.8*
 %{_mandir}/man5/%{name}.conf.5*
 %verify(not size md5 mtime) %config(noreplace) %{_localstatedir}/lib/logrotate.status
-
