@@ -1,11 +1,11 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
-Version:	3.8.8
-Release:	5
+Version:	3.15.0
+Release:	1
 License:	GPLv2+
 Group:		File tools
 Url:		https://fedorahosted.org/logrotate/
-Source0:	https://fedorahosted.org/releases/l/o/logrotate/%{name}-%{version}.tar.gz
+Source0:	https://github.com/logrotate/logrotate/archive/%{version}.tar.gz
 Source1:	logrotate.conf
 Source2:	logrotate.cron
 BuildRequires:	acl-devel
@@ -28,13 +28,15 @@ log files on your system.
 %setup -q
 
 %build
-%make CC=%{__cc} RPM_OPT_FLAGS="%{optflags} -Dasprintf=asprintf" WITH_SELINUX=no WITH_ACL=yes LDFLAGS="%{ldflags}"
+autoreconf -fiv
+%configure
+%make_build CC=%{__cc} RPM_OPT_FLAGS="%{optflags} -Dasprintf=asprintf" WITH_SELINUX=no WITH_ACL=yes LDFLAGS="%{ldflags}"
 
 %check
 make test
 
 %install
-make PREFIX=%{buildroot} MANDIR=%{_mandir} install
+%make_install
 
 install -m644 %{SOURCE1} -D %{buildroot}%{_sysconfdir}/%{name}.conf
 install -m755 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/cron.daily/%{name}
@@ -44,7 +46,7 @@ install -d %{buildroot}%{_localstatedir}/lib
 touch %{buildroot}%{_localstatedir}/lib/logrotate.status
 
 %files
-%doc CHANGES examples README*
+%doc examples README*
 %config(noreplace) %{_sysconfdir}/%{name}.conf
 %{_sysconfdir}/cron.daily/%{name}
 %{_sysconfdir}/%{name}.d
