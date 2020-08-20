@@ -1,17 +1,17 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
 Version:	3.17.0
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		File tools
 Url:		https://fedorahosted.org/logrotate/
 Source0:	https://github.com/logrotate/logrotate/archive/%{version}.tar.gz
-Source1:	logrotate.conf
-Source2:	logrotate.cron
-BuildRequires:	acl-devel
+Source1:	rwtab
+Patch0:		logrotate-3.17.0-add-Zstandard-support.patch
+BuildRequires:	pkgconfig(libacl)
 BuildRequires:	pkgconfig(popt)
-# ease upgrade regarding #20745
-Conflicts:	sysklogd < 1.4.2
+BuildRequires:	systemd-macros
+Requires:	zstd
 
 %description
 The logrotate utility is designed to simplify the administration of
@@ -25,12 +25,19 @@ Install the logrotate package if you need a utility to deal with the
 log files on your system.
 
 %prep
-%setup -q
+%autosetup -p1
+
+autoreconf -fi
 
 %build
-autoreconf -fiv
-%configure
-%make_build CC=%{__cc} RPM_OPT_FLAGS="%{optflags} -Dasprintf=asprintf" WITH_SELINUX=no WITH_ACL=yes LDFLAGS="%{ldflags}"
+%configure \
+	--with-acl \
+	--with-state-file-path=%{_localstatedir}/lib/logrotate/logrotate.status \
+	--with-compress-command="%{_bindir}/zstd" \
+	--with-uncompress-command="%{_bindir}/unzstd" \
+	--with-compress-extension=".zst"
+
+%make_build
 
 %check
 make test
@@ -38,19 +45,43 @@ make test
 %install
 %make_install
 
-install -m644 %{SOURCE1} -D %{buildroot}%{_sysconfdir}/%{name}.conf
-install -m755 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/cron.daily/%{name}
-install -d -m755 %{buildroot}%{_sysconfdir}/%{name}.d
+mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
+mkdir -p %{buildroot}%{_unitdir}
+mkdir -p %{buildroot}%{_localstatedir}/lib/logrotate
 
-install -d %{buildroot}%{_localstatedir}/lib
-touch %{buildroot}%{_localstatedir}/lib/logrotate.status
+install -p -m 644 examples/logrotate.conf %{buildroot}%{_sysconfdir}/
+install -p -m 644 examples/{b,w}tmp %{buildroot}%{_sysconfdir}/logrotate.d/
+install -p -m 644 examples/logrotate.{service,timer} %{buildroot}%{_unitdir}/
+
+# Make sure logrotate is able to run on read-only root
+mkdir -p %{buildroot}%{_sysconfdir}/rwtab.d
+install -m644 %{SOURCE1} %{buildroot}%{_sysconfdir}/rwtab.d/logrotate
+
+install -d %{buildroot}%{_presetdir}
+cat > %{buildroot}%{_presetdir}/86-%{name}.preset << EOF
+enable %{name}.timer
+EOF
+
+%pre
+# If /var/lib/logrotate/logrotate.status does not exist, create it and copy
+# the /var/lib/logrotate.status in it (if it exists). We have to do that in pre
+# script, otherwise the /var/lib/logrotate/logrotate.status would not be there,
+# because during the update, it is removed/renamed.
+if [ ! -d %{_localstatedir}/lib/logrotate/ ] && [ -f %{_localstatedir}/lib/logrotate.status ]; then
+    mkdir -p %{_localstatedir}/lib/logrotate
+    cp -a %{_localstatedir}/lib/logrotate.status %{_localstatedir}/lib/logrotate
+fi
 
 %files
 %doc examples README*
-%config(noreplace) %{_sysconfdir}/%{name}.conf
-%{_sysconfdir}/cron.daily/%{name}
-%{_sysconfdir}/%{name}.d
-%{_sbindir}/%{name}
-%{_mandir}/man8/%{name}.8*
-%{_mandir}/man5/%{name}.conf.5*
-%verify(not size md5 mtime) %config(noreplace) %{_localstatedir}/lib/logrotate.status
+%{_sbindir}/logrotate
+%{_presetdir}/86-%{name}.preset
+%{_unitdir}/logrotate.{service,timer}
+%{_mandir}/man8/logrotate.8*
+%{_mandir}/man5/logrotate.conf.5*
+%config(noreplace) %{_sysconfdir}/logrotate.conf
+%dir %{_sysconfdir}/logrotate.d
+%config(noreplace) %{_sysconfdir}/logrotate.d/{b,w}tmp
+%dir %{_localstatedir}/lib/logrotate
+%ghost %verify(not size md5 mtime) %attr(0644, root, root) %{_localstatedir}/lib/logrotate/logrotate.status
+%config(noreplace) %{_sysconfdir}/rwtab.d/logrotate
