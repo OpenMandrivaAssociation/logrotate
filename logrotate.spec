@@ -1,11 +1,11 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
-Version:	3.18.1
+Version:	3.19.0
 Release:	1
 License:	GPLv2+
 Group:		File tools
-Url:		https://fedorahosted.org/logrotate/
-Source0:	https://github.com/logrotate/logrotate/archive/%{name}-%{version}.tar.gz
+Url:		https://github.com/logrotate/logrotate
+Source0:	https://github.com/logrotate/logrotate/releases/download/%{version}/logrotate-%{version}.tar.xz
 Source1:	rwtab
 
 BuildRequires:	pkgconfig(libacl)
