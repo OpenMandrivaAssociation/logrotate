@@ -10,7 +10,7 @@ Source1:	rwtab
 
 BuildRequires:	pkgconfig(libacl)
 BuildRequires:	pkgconfig(popt)
-BuildRequires:	systemd-macros
+BuildRequires:	systemd-rpm-macros
 Requires:	zstd
 
 %description
