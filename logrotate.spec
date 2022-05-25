@@ -1,6 +1,6 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
-Version:	3.19.0
+Version:	3.20.0
 Release:	1
 License:	GPLv2+
 Group:		File tools
@@ -83,8 +83,8 @@ fi
 %{_sbindir}/logrotate
 %{_presetdir}/86-%{name}.preset
 %{_unitdir}/logrotate.{service,timer}
-%{_mandir}/man8/logrotate.8*
-%{_mandir}/man5/logrotate.conf.5*
+%doc %{_mandir}/man8/logrotate.8*
+%doc %{_mandir}/man5/logrotate.conf.5*
 %config(noreplace) %{_sysconfdir}/logrotate.conf
 %dir %{_sysconfdir}/logrotate.d
 %config(noreplace) %{_sysconfdir}/logrotate.d/{b,w}tmp
