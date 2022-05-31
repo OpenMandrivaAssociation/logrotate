@@ -1,6 +1,6 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
-Version:	3.20.0
+Version:	3.20.1
 Release:	1
 License:	GPLv2+
 Group:		File tools
