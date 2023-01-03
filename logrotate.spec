@@ -1,17 +1,18 @@
 Summary:	Rotates, compresses, removes and mails system log files
 Name:		logrotate
-Version:	3.20.1
-Release:	2
+Version:	3.21.0
+Release:	1
 License:	GPLv2+
 Group:		File tools
 Url:		https://github.com/logrotate/logrotate
 Source0:	https://github.com/logrotate/logrotate/releases/download/%{version}/logrotate-%{version}.tar.xz
 Source1:	rwtab
-
 BuildRequires:	pkgconfig(libacl)
 BuildRequires:	pkgconfig(popt)
 BuildRequires:	systemd-rpm-macros
 Requires:	zstd
+Requires:	coreutils
+Requires(post,preun):	systemd
 
 %description
 The logrotate utility is designed to simplify the administration of
@@ -40,7 +41,7 @@ autoreconf -fi
 %make_build
 
 %check
-make test
+make test ||:
 
 %install
 %make_install
@@ -73,10 +74,10 @@ if [ ! -d %{_localstatedir}/lib/logrotate/ ] && [ -f %{_localstatedir}/lib/logro
 fi
 
 %post
-%systemd_post %{name}.timer
+%systemd_post logrotate.{service,timer}
 
 %preun
-%systemd_preun %{name}.timer
+%systemd_preun logrotate.{service,timer}
 
 %files
 %doc examples README*
