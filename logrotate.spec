@@ -7,6 +7,11 @@ Group:		File tools
 Url:		https://github.com/logrotate/logrotate
 Source0:	https://github.com/logrotate/logrotate/releases/download/%{version}/logrotate-%{version}.tar.xz
 Source1:	rwtab
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	pkgconfig(libacl)
 BuildRequires:	pkgconfig(popt)
 BuildRequires:	systemd-rpm-macros
